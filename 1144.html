@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Last War 戰區家人物語｜從並肩作戰到一輩子的摯友</title>
+
+  <!-- OpenGraph 社交分享預覽標籤（Line / Discord / Threads 貼上網址時顯示精美卡片） -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="🛡️ Last War 戰區家人物語｜從並肩作戰到一輩子的摯友" />
+  <meta property="og:description" content="橫跨台、港、新、泰、美的十六位戰友，從半夜開罩、搶寶開車到成為一輩子的家人！輸入你的遊戲 ID 展開專屬回憶冒險。" />
+  <meta name="description" content="橫跨台、港、新、泰、美的十六位 Last War 戰友，從並肩作戰到成為家人的像素互動小遊戲。" />
+
+  <!-- iOS Safari 加入主畫面全螢幕 App 體驗設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LW戰區家人物語" />
+  <meta name="theme-color" content="#0b0f17" />
+
+  <!-- 載入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 載入 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0b0f17;
+      --panel-bg: #131b2b;
+      --panel-border: #2a3b5c;
+      --accent-amber: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --accent-rose: #f43f5e;
+      --accent-emerald: #10b981;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: #e2e8f0;
+      overflow-x: hidden;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.09) 0%, transparent 55%),
+        radial-gradient(circle at 85% 90%, rgba(16, 185, 129, 0.07) 0%, transparent 45%),
+        linear-gradient(rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+    }
+
+    .font-pixel {
+      font-family: 'Press Start 2P', 'Noto Sans TC', monospace;
+    }
+
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+    }
+
+    /* 復古 RPG 邊框與光澤 */
+    .rpg-box {
+      background: linear-gradient(180deg, #162033 0%, #0f1624 100%);
+      border: 2px solid #334155;
+      box-shadow: 0 0 0 2px #090d16, 0 12px 28px -6px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+    }
+
+    .rpg-box-amber {
+      border-color: #d97706;
+      box-shadow: 0 0 0 2px #090d16, 0 0 24px rgba(245, 158, 11, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* 像素按鈕質感 */
+    .btn-rpg {
+      transition: transform 0.1s ease, filter 0.15s ease;
+      position: relative;
+      border-bottom-width: 4px;
+      user-select: none;
+    }
+    .btn-rpg:active:not(:disabled) {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+    .btn-rpg:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 角色動畫 */
+    @keyframes pixelWalk {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-7px) rotate(-2.5deg); }
+      50% { transform: translateY(0px) rotate(0deg); }
+      75% { transform: translateY(-7px) rotate(2.5deg); }
+    }
+    .animate-walk {
+      animation: pixelWalk 0.55s infinite ease-in-out;
+    }
+
+    @keyframes floatIdle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+    .animate-idle {
+      animation: floatIdle 2.2s infinite ease-in-out;
+    }
+
+    /* 地面滾動條 */
+    @keyframes scrollGrid {
+      0% { background-position: 0 0; }
+      100% { background-position: -48px 0; }
+    }
+    .map-ground {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(71, 85, 105, 0.45) 0px,
+        rgba(71, 85, 105, 0.45) 3px,
+        transparent 3px,
+        transparent 24px
+      );
+      animation: scrollGrid 1.6s linear infinite;
+      animation-play-state: paused;
+    }
+    .map-ground.moving {
+      animation-play-state: running;
+    }
+
+    /* 打字機光標 */
+    .cursor-blink::after {
+      content: '▋';
+      color: #f59e0b;
+      animation: blink 0.8s infinite;
+      margin-left: 2px;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    /* 像素頭像 SVG 容器 */
+    .pixel-portrait svg {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+
+    /* 自訂捲軸 */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ==================== 頂部導覽列 ==================== -->
+  <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/90 px-3 py-2.5 sm:px-6">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 flex items-center justify-center shadow-lg shadow-amber-500/25 border border-amber-300/40 shrink-0">
+          <span class="text-lg">🛡️</span>
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-sm sm:text-base font-black tracking-wide text-amber-400 truncate flex items-center gap-1.5">
+            <span>Last War 戰區家人物語</span>
+            <span class="hidden md:inline-block text-[10px] font-mono-tech bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">從並肩作戰到一輩子的摯友</span>
+          </h1>
+          <p class="text-[11px] text-slate-400 truncate hidden sm:block">橫跨台、港、新、泰、美的十六人青春回憶錄</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- 聯盟家人名冊按鈕 -->
+        <button id="btn-open-roster" onclick="toggleRosterModal(true)" class="hidden btn-rpg bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-950 text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+          <span>📖</span>
+          <span>家人名冊</span>
+          <span id="roster-badge" class="bg-amber-500 text-slate-950 text-[10px] font-black px-1.5 py-0.2 rounded-full">0/16</span>
+        </button>
+
+        <!-- 音效開關 -->
+        <button id="btn-sound" onclick="toggleSound()" title="切換 8-bit 音效" class="btn-rpg bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-950 p-2 rounded-xl text-sm">
+          🔊
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 主內容區域 ==================== -->
+  <main class="flex-1 w-full max-w-5xl mx-auto px-3 py-4 sm:px-6 sm:py-6 flex flex-col justify-center">
+
+    <!-- 【畫面一：專屬開局設定畫面】 -->
+    <section id="screen-start" class="max-w-xl mx-auto w-full rpg-box rpg-box-amber p-5 sm:p-8 space-y-6">
+      <div class="text-center space-y-2.5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono-tech">
+          <span>📡 跨國戰區專屬頻道 · 訊號滿格</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        </div>
+        <h2 class="text-xl sm:text-3xl font-black text-white tracking-tight leading-snug">
+          Last War 戰區家人物語<br/>
+          <span class="text-base sm:text-xl text-amber-400 font-bold">從並肩作戰到一輩子的摯友</span>
+        </h2>
+        <div class="bg-slate-950/75 border border-slate-800/90 rounded-xl p-3.5 sm:p-4 text-left">
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            那一年，我們只是在廢土世界裡各自求生的指揮官。直到世界頻道的一句喊話、半夜三點的集結警報、還有一場場打不完的戰區爭霸，把來自<span class="text-amber-300 font-bold">香港、台灣、新加坡、泰國、美國</span>的我們緊緊綁在一起。從搶寶、開罩、互損開車，到現實中互相牽掛——這不是一場遊戲，這是屬於我們十六個人的青春與家人故事。
+          </p>
+        </div>
+      </div>
+
+      <!-- 輸入聯盟代號與遊戲 ID -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="space-y-1.5">
+          <label for="input-alliance-tag" class="block text-xs font-bold uppercase tracking-wider text-amber-300">
+            1. 聯盟簡稱 (選填)
+          </label>
+          <input 
+            type="text" 
+            id="input-alliance-tag" 
+            maxlength="5"
+            value="FAM"
+            placeholder="例如：FAM" 
+            class="w-full bg-slate-950/90 border-2 border-slate-700 focus:border-amber-400 rounded-xl px-3.5 py-3 text-amber-300 placeholder-slate-500 outline-none text-base font-mono-tech font-bold uppercase text-center transition"
+          />
+        </div>
+
+        <div class="sm:col-span-2 space-y-1.5">
+          <label for="input-player-id" class="block text-xs font-bold uppercase tracking-wider text-amber-300">
+            2. 你的 Last War 遊戲 ID *
+          </label>
+          <div class="relative">
+            <input 
+              type="text" 
+              id="input-player-id" 
+              maxlength="14"
+              placeholder="輸入你的遊戲暱稱..." 
+              class="w-full bg-slate-950/90 border-2 border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 pr-24 text-white placeholder-slate-500 outline-none text-base font-bold transition"
+            />
+            <button type="button" onclick="randomPlayerName()" class="absolute right-2 top-1/2 -translate-y-1/2 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-600 transition">
+              🎲 隨機ID
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 選擇聯盟定位 -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold uppercase tracking-wider text-amber-300">
+          3. 你在咱們聯盟裡的日常定位
+        </label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="role-selector">
+          <button type="button" data-role="rally" onclick="selectRole('rally')" class="role-card text-left p-3 rounded-xl border-2 border-amber-400 bg-amber-500/10 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-sm">⚔️ 集結先鋒車頭</span>
+              <span class="text-[11px] font-mono-tech text-amber-300">戰力 +2.5M</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">誰敢動我們家人，第一個飛過去把對面基地點燃。</p>
+          </button>
+
+          <button type="button" data-role="farmer" onclick="selectRole('farmer')" class="role-card text-left p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-500 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-sm">🌾 準時收菜農夫</span>
+              <span class="text-[11px] font-mono-tech text-emerald-300">戰力 +2.0M / 羈絆 +6</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">挖寶秒協助、集結秒填滿，全盟最暖心的神隊友。</p>
+          </button>
+
+          <button type="button" data-role="diplomat" onclick="selectRole('diplomat')" class="role-card text-left p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-500 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-sm">💬 盟頻歡樂氣氛組</span>
+              <span class="text-[11px] font-mono-tech text-cyan-300">羈絆 +14</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">每天在群裡接梗開車、語音陪聊，有你在絕不冷場。</p>
+          </button>
+
+          <button type="button" data-role="nightowl" onclick="selectRole('nightowl')" class="role-card text-left p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-500 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-sm">🦉 半夜巡邏守夜人</span>
+              <span class="text-[11px] font-mono-tech text-purple-300">戰力 +1.8M / 羈絆 +10</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">凌晨三點還在盯雷達，專叫忘記開罩的夥伴起床。</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- 16位夥伴一覽 -->
+      <div class="bg-slate-950/75 border border-slate-800 rounded-xl p-3">
+        <div class="text-[11px] text-slate-400 mb-2 flex items-center justify-between">
+          <span>即將重逢的 16 位聯盟家人：</span>
+          <span class="text-amber-400/90">可自由輸入對話互動</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5" id="start-members-preview"></div>
+      </div>
+
+      <!-- 開始按鈕 -->
+      <button onclick="startGame()" class="w-full btn-rpg bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:brightness-110 text-slate-950 border-rose-800 font-black text-base sm:text-lg py-3.5 rounded-xl shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2">
+        <span>🚀 登入戰區，與家人們重逢</span>
+      </button>
+    </section>
+
+    <!-- 【畫面二：主遊戲推進舞台】 -->
+    <section id="screen-game" class="hidden space-y-4">
+      
+      <!-- 頂部狀態儀表板 -->
+      <div class="rpg-box p-3 sm:p-4 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 items-center">
+        <!-- 玩家資訊 -->
+        <div class="bg-slate-950/75 border border-slate-800 rounded-xl px-3 py-2">
+          <div class="text-[10px] text-slate-400 flex items-center gap-1 truncate">
+            <span>🎖️ 指揮官</span>
+            <span id="hud-role-badge" class="text-amber-400 font-bold truncate"></span>
+          </div>
+          <div id="hud-player-name" class="text-sm sm:text-base font-black text-white truncate mt-0.5">-</div>
+        </div>
+
+        <!-- 戰力值 -->
+        <div class="bg-slate-950/75 border border-slate-800 rounded-xl px-3 py-2">
+          <div class="text-[10px] text-slate-400">⚔️ 聯盟總戰力</div>
+          <div class="text-sm sm:text-base font-mono-tech font-bold text-rose-400 mt-0.5 flex items-center gap-1">
+            <span id="hud-power">12.5M</span>
+            <span id="hud-power-diff" class="text-[11px] text-emerald-400 opacity-0 transition-opacity"></span>
+          </div>
+        </div>
+
+        <!-- 家族羈絆 -->
+        <div class="bg-slate-950/75 border border-slate-800 rounded-xl px-3 py-2">
+          <div class="text-[10px] text-slate-400">❤️ 家族羈絆值</div>
+          <div class="text-sm sm:text-base font-mono-tech font-bold text-amber-400 mt-0.5 flex items-center gap-1">
+            <span id="hud-bond">10</span>
+            <span id="hud-bond-diff" class="text-[11px] text-emerald-400 opacity-0 transition-opacity"></span>
+          </div>
+        </div>
+
+        <!-- 回憶章節進度 -->
+        <div class="bg-slate-950/75 border border-slate-800 rounded-xl px-3 py-2">
+          <div class="flex items-center justify-between text-[10px] text-slate-400">
+            <span id="hud-season" class="truncate">S0 初入戰區</span>
+            <span class="font-mono-tech text-cyan-300 shrink-0"><span id="hud-step">1</span>/<span id="hud-max-step">16</span></span>
+          </div>
+          <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mt-1.5">
+            <div id="hud-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-orange-400 to-emerald-400 transition-all duration-500" style="width: 6%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 中央像素冒險舞台 -->
+      <div class="rpg-box overflow-hidden relative">
+        <!-- 場景頂部資訊條 -->
+        <div class="bg-slate-950/85 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs gap-2">
+          <div class="flex items-center gap-2 truncate">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+            <span id="stage-location" class="font-mono-tech text-cyan-300 font-bold truncate">戰區 #888 · 聯盟領地中心</span>
+          </div>
+          <span id="stage-time" class="font-mono-tech text-slate-400 shrink-0">Day 1 · 21:30</span>
+        </div>
+
+        <!-- 視覺地圖舞台 -->
+        <div id="pixel-stage" class="relative h-52 sm:h-60 bg-gradient-to-b from-slate-900 via-[#152036] to-slate-950 flex flex-col justify-between p-4 overflow-hidden select-none">
+          <!-- 背景雷達與星空裝飾 -->
+          <div class="absolute inset-0 opacity-20 pointer-events-none flex items-center justify-center">
+            <div class="w-60 h-60 rounded-full border border-amber-400/40"></div>
+            <div class="w-96 h-96 rounded-full border border-emerald-400/20 absolute"></div>
+          </div>
+
+          <!-- 浮動事件提示橫幅 -->
+          <div class="relative z-10 flex justify-center">
+            <div id="event-banner" class="bg-slate-950/90 border border-amber-500/40 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold text-amber-300 shadow-lg flex items-center gap-2 max-w-full">
+              <span id="event-icon">📡</span>
+              <span id="event-title" class="truncate">準備在廢土世界尋找我們的聯盟家人...</span>
+            </div>
+          </div>
+
+          <!-- 角色站位舞台（含自繪像素人物頭像） -->
+          <div class="relative z-10 flex items-end justify-around max-w-lg mx-auto w-full pb-2.5">
+            <!-- 主角像素角色 -->
+            <div id="sprite-player" class="flex flex-col items-center animate-idle">
+              <div class="px-2.5 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-400/50 text-[10px] font-bold text-cyan-200 mb-1.5 truncate max-w-[115px]" id="sprite-player-tag">
+                指揮官
+              </div>
+              <div id="sprite-player-avatar" class="pixel-portrait w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-b from-cyan-500 to-blue-800 border-2 border-cyan-200 shadow-lg shadow-cyan-500/25 p-1.5 relative">
+                <!-- 動態注入主角像素 SVG -->
+              </div>
+            </div>
+
+            <!-- 中間互動特效 -->
+            <div id="stage-fx" class="text-2xl sm:text-3xl opacity-0 transition-all duration-300 transform scale-75 mb-4">
+              💬
+            </div>
+
+            <!-- 遇到的聯盟家人角色 -->
+            <div id="sprite-npc" class="hidden flex-col items-center animate-idle">
+              <div id="sprite-npc-tag" class="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/50 text-[10px] font-bold text-amber-200 mb-1.5">
+                家人
+              </div>
+              <div id="sprite-npc-avatar" class="pixel-portrait w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-b from-amber-500 to-orange-700 border-2 border-amber-200 shadow-lg shadow-amber-500/25 p-1.5 relative">
+                <!-- 動態注入夥伴像素 SVG -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 地面滾動條 -->
+          <div id="map-ground" class="map-ground absolute bottom-0 left-0 right-0 h-5 bg-slate-900/95 border-t border-slate-700/80"></div>
+        </div>
+
+        <!-- 情境描述與 RPG 對話互動區 -->
+        <div class="p-4 sm:p-6 bg-slate-950/65 border-t border-slate-800 space-y-4">
+          
+          <!-- 情境旁白框 -->
+          <div class="bg-slate-900/95 border border-slate-700/80 rounded-xl p-3.5 sm:p-4">
+            <div class="text-[11px] font-mono-tech text-emerald-400 mb-1 flex items-center justify-between">
+              <span>▶ 戰區回憶章節</span>
+              <span id="event-category-tag" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">戰區巡邏</span>
+            </div>
+            <p id="narrative-text" class="text-sm sm:text-base text-slate-200 leading-relaxed">
+              你剛傳送到聯盟領地中心，準備開啟這段難忘的戰區旅程...
+            </p>
+          </div>
+
+          <!-- 【狀態 A：推進按鈕區】 -->
+          <div id="action-explore-area" class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+            <button id="btn-next-step" onclick="advanceJourney()" class="w-full sm:w-auto min-w-[250px] btn-rpg bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-slate-950 border-teal-800 font-black text-base py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+              <span>🧭 繼續巡邏，遇見下一位家人</span>
+            </button>
+            <button id="btn-early-ending" onclick="showEnding()" class="hidden w-full sm:w-auto btn-rpg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-700/60 font-bold text-sm py-3 px-4 rounded-xl">
+              🏆 提前結算家族回憶結局
+            </button>
+          </div>
+
+          <!-- 【狀態 B：RPG 角色對話互動區】 -->
+          <div id="dialogue-area" class="hidden space-y-3.5">
+            <!-- 角色名片與開場白 -->
+            <div class="rpg-box rpg-box-amber p-3.5 sm:p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+                <div class="flex items-center gap-3">
+                  <div id="npc-dialog-portrait" class="pixel-portrait w-12 h-12 rounded-xl bg-slate-900 border border-amber-400/50 p-1 shrink-0"></div>
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span id="npc-dialog-name" class="font-black text-base sm:text-lg text-amber-400">角色名稱</span>
+                      <span id="npc-dialog-title" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/30">人設標籤</span>
+                    </div>
+                    <p id="npc-dialog-desc" class="text-[11px] text-slate-400 mt-0.5">角色簡介</p>
+                  </div>
+                </div>
+                <div class="text-xs font-mono-tech text-slate-300 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">
+                  默契值：<span id="npc-dialog-affinity" class="text-rose-400 font-bold">0</span> ❤️
+                </div>
+              </div>
+
+              <!-- 角色台詞氣泡 -->
+              <div class="bg-slate-900/95 rounded-xl p-3.5 border-l-4 border-amber-400">
+                <p id="npc-speech-text" class="text-sm sm:text-base text-white leading-relaxed"></p>
+              </div>
+
+              <!-- 玩家回覆後的回應顯示區 -->
+              <div id="reply-result-box" class="hidden space-y-2.5 pt-1">
+                <div class="flex justify-end">
+                  <div class="bg-cyan-950/90 border border-cyan-500/40 text-cyan-100 rounded-xl rounded-tr-none px-3.5 py-2.5 text-xs sm:text-sm max-w-[88%]">
+                    <span class="text-[10px] text-cyan-400 block font-bold mb-0.5">你回覆：</span>
+                    <span id="player-said-text"></span>
+                  </div>
+                </div>
+                <div class="bg-amber-950/45 border border-amber-500/40 rounded-xl rounded-tl-none p-3.5 text-sm sm:text-base text-amber-100">
+                  <span id="npc-reply-speaker" class="text-xs text-amber-400 font-bold block mb-1">家人回應：</span>
+                  <p id="npc-reply-text" class="leading-relaxed"></p>
+                  <div id="interaction-reward-badge" class="mt-2.5 inline-flex items-center gap-2 text-xs font-mono-tech bg-slate-950/85 border border-emerald-500/40 text-emerald-300 px-2.5 py-1 rounded-md">
+                    ✨ 羈絆 +8 · 戰力 +0.8M
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 玩家自由輸入表單 -->
+            <div id="player-input-box" class="space-y-2.5">
+              <div class="text-xs text-slate-400">
+                ✍️ 輸入你想對 <strong id="prompt-npc-name" class="text-amber-300">他</strong> 說的話（隨便聊什麼梗他都接得住！）：
+              </div>
+
+              <!-- 快捷推薦回覆 -->
+              <div id="quick-replies" class="flex flex-wrap gap-1.5"></div>
+
+              <form onsubmit="submitPlayerReply(event)" class="flex flex-col sm:flex-row gap-2">
+                <input 
+                  type="text" 
+                  id="input-player-chat" 
+                  maxlength="60"
+                  placeholder="輸入你想說的話、喊集結、吐槽或開玩笑..." 
+                  class="flex-1 bg-slate-900 border-2 border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 text-sm sm:text-base text-white placeholder-slate-500 outline-none"
+                />
+                <button type="submit" class="btn-rpg bg-amber-500 hover:bg-amber-400 text-slate-950 border-amber-700 font-black px-5 py-3 rounded-xl text-sm sm:text-base shrink-0">
+                  發送訊息 ➤
+                </button>
+              </form>
+            </div>
+
+            <!-- 回覆完成後的繼續按鈕 -->
+            <div id="after-reply-actions" class="hidden flex justify-center pt-1">
+              <button onclick="finishInteraction()" class="w-full sm:w-auto min-w-[250px] btn-rpg bg-gradient-to-r from-cyan-500 to-blue-500 hover:brightness-110 text-slate-950 border-blue-800 font-black py-3 px-6 rounded-xl text-base">
+                收進回憶錄，繼續前進 ➔
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 底部即時聯盟頻道動態 Log -->
+      <div class="rpg-box p-3 sm:p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <span>📻 聯盟聊天室即時回憶紀錄</span>
+          </span>
+          <span class="text-[11px] text-slate-500">已收藏 <span id="log-count">0</span> 則對話</span>
+        </div>
+        <div id="alliance-chat-log" class="max-h-36 overflow-y-auto space-y-1.5 text-xs pr-1">
+          <div class="text-slate-500 italic">系統：戰區頻道已連線，準備記錄你們的點點滴滴...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【畫面三：多結局與一輩子的家人紀念冊】 -->
+    <section id="screen-ending" class="hidden max-w-2xl mx-auto w-full rpg-box rpg-box-amber p-5 sm:p-8 space-y-6">
+      <div class="text-center space-y-2 border-b border-slate-800 pb-5">
+        <div class="inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-mono-tech">
+          🏆 SEASON FINALE · 戰區家人物語結局
+        </div>
+        <div id="ending-emoji" class="text-5xl sm:text-6xl py-2">👨‍👩‍👧‍👦</div>
+        <h2 id="ending-title" class="text-2xl sm:text-3xl font-black text-amber-400">
+          跨越國界的線下聚會大團圓
+        </h2>
+        <p id="ending-subtitle" class="text-xs sm:text-sm text-slate-400">
+          從並肩作戰到一輩子的摯友
+        </p>
+      </div>
+
+      <!-- 結局故事敘述 -->
+      <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3">
+        <p id="ending-story" class="text-sm sm:text-base text-slate-200 leading-relaxed"></p>
+      </div>
+
+      <!-- 數據結算卡 -->
+      <div class="grid grid-cols-3 gap-2.5 text-center">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+          <div class="text-[11px] text-slate-400">最終聯盟戰力</div>
+          <div id="end-stat-power" class="text-base sm:text-xl font-mono-tech font-black text-rose-400 mt-1">0M</div>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+          <div class="text-[11px] text-slate-400">家族羈絆總值</div>
+          <div id="end-stat-bond" class="text-base sm:text-xl font-mono-tech font-black text-amber-400 mt-1">0</div>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+          <div class="text-[11px] text-slate-400">重逢家人數</div>
+          <div id="end-stat-met" class="text-base sm:text-xl font-mono-tech font-black text-emerald-400 mt-1">0/16</div>
+        </div>
+      </div>
+
+      <!-- 靈魂戰友卡片 -->
+      <div id="best-buddy-card" class="bg-gradient-to-r from-amber-500/15 to-rose-500/15 border border-amber-500/40 rounded-xl p-4 flex items-center gap-3.5">
+        <div id="best-buddy-portrait" class="pixel-portrait w-16 h-16 rounded-xl bg-slate-900 border border-amber-400/60 p-1.5 shrink-0"></div>
+        <div>
+          <div class="text-[11px] text-amber-300 font-bold">💖 本季最有默契的靈魂家人</div>
+          <div id="best-buddy-name" class="text-base sm:text-lg font-black text-white">夥伴名稱</div>
+          <p id="best-buddy-quote" class="text-xs text-slate-300 mt-1 italic">「有你們在，這遊戲才這麼好玩！」</p>
+        </div>
+      </div>
+
+      <!-- 分享與重玩按鈕 -->
+      <div class="flex flex-col sm:flex-row gap-3 pt-1">
+        <button onclick="toggleRosterModal(true)" class="flex-1 btn-rpg bg-slate-800 hover:bg-slate-700 text-white border-slate-950 font-bold py-3.5 rounded-xl text-sm">
+          📖 16 位家人紀念冊
+        </button>
+        <button onclick="copyShareSummary()" class="flex-1 btn-rpg bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-900 font-black py-3.5 rounded-xl text-sm shadow-lg shadow-emerald-500/20">
+          📋 複製專屬聯盟戰報分享給戰友
+        </button>
+        <button onclick="resetGame()" class="flex-1 btn-rpg bg-amber-500 hover:bg-amber-400 text-slate-950 border-amber-700 font-black py-3.5 rounded-xl text-sm">
+          🔄 再玩一輪
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== 16 位家人紀念冊彈窗 ==================== -->
+  <div id="modal-roster" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="rpg-box max-w-4xl w-full max-h-[88vh] flex flex-col overflow-hidden">
+      <div class="px-4 py-3.5 sm:px-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/95">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-amber-400 flex items-center gap-2">
+            <span>📖 十六位戰區家人紀念冊</span>
+          </h3>
+          <p class="text-xs text-slate-400">從並肩作戰到一輩子的摯友 · 每一位都無可取代</p>
+        </div>
+        <button onclick="toggleRosterModal(false)" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">
+          ✕
+        </button>
+      </div>
+      
+      <div id="roster-grid" class="p-4 sm:p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- 動態生成 16 位家人卡片 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 輕量提示 Toast -->
+  <div id="toast-msg" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 bg-slate-900 border-2 border-amber-400 text-amber-200 px-4 py-2.5 rounded-xl shadow-2xl text-xs sm:text-sm font-bold text-center max-w-[90vw]">
+    提示訊息
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. 復古 8-bit 音效合成器 (Web Audio API)
+    // =========================================================================
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, type = 'square', duration = 0.08, delay = 0) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+        gain.gain.setValueAtTime(0.055, audioCtx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + delay);
+        osc.stop(audioCtx.currentTime + delay + duration);
+      } catch (e) {}
+    }
+
+    const sfx = {
+      click: () => playTone(520, 'square', 0.06),
+      step: () => { playTone(330, 'triangle', 0.07, 0); playTone(440, 'triangle', 0.09, 0.08); },
+      encounter: () => { playTone(440, 'square', 0.08, 0); playTone(554, 'square', 0.08, 0.09); playTone(659, 'square', 0.14, 0.18); },
+      send: () => { playTone(587, 'triangle', 0.07, 0); playTone(784, 'triangle', 0.1, 0.07); },
+      levelup: () => { [523, 659, 784, 1046].forEach((f, i) => playTone(f, 'square', 0.12, i * 0.09)); }
+    };
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('btn-sound').textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) sfx.click();
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast-msg');
+      el.textContent = msg;
+      el.classList.remove('opacity-0', 'translate-y-2');
+      el.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        el.classList.remove('opacity-100', 'translate-y-0');
+        el.classList.add('opacity-0', 'translate-y-2');
+      }, 2600);
+    }
+
+    // =========================================================================
+    // 2. 像素人物頭像 SVG 生成器 (為主角與每位家人繪製專屬像素肖像)
+    // =========================================================================
+    function createPixelSvg({ hairColor, hairStyle, skinColor = '#fbd3b6', outfitColor, accessory = '', badge = '' }) {
+      let hairSvg = '';
+      if (hairStyle === 'short') {
+        hairSvg = `<rect x="4" y="2" width="8" height="3" fill="${hairColor}"/><rect x="3" y="3" width="2" height="4" fill="${hairColor}"/><rect x="11" y="3" width="2" height="4" fill="${hairColor}"/>`;
+      } else if (hairStyle === 'long') {
+        hairSvg = `<rect x="3" y="2" width="10" height="3" fill="${hairColor}"/><rect x="2" y="4" width="2" height="9" fill="${hairColor}"/><rect x="12" y="4" width="2" height="9" fill="${hairColor}"/>`;
+      } else if (hairStyle === 'bob') {
+        hairSvg = `<rect x="3" y="2" width="10" height="3" fill="${hairColor}"/><rect x="3" y="4" width="2" height="6" fill="${hairColor}"/><rect x="11" y="4" width="2" height="6" fill="${hairColor}"/>`;
+      } else if (hairStyle === 'spiky') {
+        hairSvg = `<rect x="4" y="1" width="2" height="2" fill="${hairColor}"/><rect x="7" y="1" width="2" height="2" fill="${hairColor}"/><rect x="10" y="1" width="2" height="2" fill="${hairColor}"/><rect x="4" y="3" width="8" height="2" fill="${hairColor}"/>`;
+      } else if (hairStyle === 'bun') {
+        hairSvg = `<rect x="6" y="1" width="4" height="2" fill="${hairColor}"/><rect x="4" y="3" width="8" height="2" fill="${hairColor}"/><rect x="3" y="4" width="2" height="5" fill="${hairColor}"/><rect x="11" y="4" width="2" height="5" fill="${hairColor}"/>`;
+      } else {
+        hairSvg = `<rect x="4" y="2" width="8" height="2" fill="${hairColor}"/><rect x="3" y="3" width="1" height="3" fill="${hairColor}"/><rect x="12" y="3" width="1" height="3" fill="${hairColor}"/>`;
+      }
+
+      let accSvg = '';
+      if (accessory === 'glasses') {
+        accSvg = `<rect x="4" y="6" width="3" height="2" fill="#0f172a" opacity="0.85"/><rect x="9" y="6" width="3" height="2" fill="#0f172a" opacity="0.85"/><rect x="7" y="6" width="2" height="1" fill="#94a3b8"/>`;
+      } else if (accessory === 'shades') {
+        accSvg = `<rect x="4" y="6" width="8" height="2" fill="#1e1b4b"/><rect x="5" y="6" width="2" height="1" fill="#38bdf8"/>`;
+      } else if (accessory === 'beard') {
+        accSvg = `<rect x="5" y="9" width="6" height="2" fill="${hairColor}" opacity="0.85"/>`;
+      } else if (accessory === 'headset') {
+        accSvg = `<rect x="2" y="5" width="1" height="4" fill="#38bdf8"/><rect x="13" y="5" width="1" height="4" fill="#38bdf8"/><rect x="3" y="8" width="3" height="1" fill="#38bdf8"/>`;
+      } else if (accessory === 'crown') {
+        accSvg = `<rect x="5" y="1" width="6" height="1" fill="#fbbf24"/><rect x="5" y="0" width="1" height="1" fill="#fbbf24"/><rect x="8" y="0" width="1" height="1" fill="#fbbf24"/><rect x="10" y="0" width="1" height="1" fill="#fbbf24"/>`;
+      } else if (accessory === 'helmet') {
+        accSvg = `<rect x="3" y="2" width="10" height="3" fill="#0284c7"/><rect x="4" y="1" width="8" height="1" fill="#38bdf8"/>`;
+      }
+
+      return `
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <!-- 臉部 -->
+          <rect x="4" y="4" width="8" height="7" fill="${skinColor}"/>
+          <!-- 眼睛 -->
+          <rect x="5" y="6" width="2" height="2" fill="#0f172a"/>
+          <rect x="9" y="6" width="2" height="2" fill="#0f172a"/>
+          <!-- 腮紅與微笑 -->
+          <rect x="4" y="8" width="1" height="1" fill="#fb7185" opacity="0.65"/>
+          <rect x="11" y="8" width="1" height="1" fill="#fb7185" opacity="0.65"/>
+          <rect x="7" y="9" width="2" height="1" fill="#be123c"/>
+          <!-- 頭髮 -->
+          ${hairSvg}
+          <!-- 衣服 -->
+          <rect x="3" y="11" width="10" height="5" fill="${outfitColor}"/>
+          <rect x="6" y="11" width="4" height="2" fill="#f8fafc" opacity="0.3"/>
+          <!-- 配件 -->
+          ${accSvg}
+        </svg>
+      `;
+    }
+
+    const PLAYER_PORTRAIT_SVG = createPixelSvg({
+      hairColor: '#1e293b',
+      hairStyle: 'short',
+      outfitColor: '#0284c7',
+      accessory: 'helmet'
+    });
+
+    // =========================================================================
+    // 3. 完整 16 位聯盟家人資料庫
+    // =========================================================================
+    const ALLIANCE_MEMBERS = [
+      {
+        id: 'jiwu',
+        name: '機武',
+        tag: '短髮機智女漢子',
+        avatar: '💇‍♀️',
+        portrait: createPixelSvg({ hairColor: '#334155', hairStyle: 'bob', outfitColor: '#e11d48' }),
+        color: 'from-rose-500 to-red-700',
+        desc: '戰術擔當、嘴硬心軟、關鍵時刻最罩的短髮女漢子，打架從沒在怕！',
+        openers: [
+          '「喂！{player}，對面那群紅名又在邊界試探了，兵力集結好了沒？別怂，直接幹他！」',
+          '「剛剛世界頻道有人敢嗆我們盟？笑死，我已經把座標標記好了，跟我一起飛過去教他做人！」',
+          '「戰力升得不錯嘛 {player}！嘴上不說，其實你這幾天的表現我都看在眼裡，今晚繼續並肩作戰！」'
+        ],
+        quickReplies: ['收到！馬上飛過去跟機武姐集結！', '機武姐嘴硬心軟最罩了！', '等我三秒換陣容，今晚把對面點燃！'],
+        keywordRules: [
+          { keys: ['帥', '姐', '罩', '崇拜', '強', '厲害', '心軟'], replies: ['「少拍馬屁啦哈哈！有我在，誰都別想動我們聯盟一根汗毛！」', '「那是必須的！自己人我不罩誰罩？今晚讓對面知道什麼叫絕望！」'] },
+          { keys: ['集結', '打架', '衝', '飛', '幹', '開打'], replies: ['「這才像話！隊伍秒滿，準備倒數三秒一起撞過去！」', '「漂亮！就是喜歡你這種乾脆的脾氣，把他們基地燒成煙火！」'] },
+          { keys: ['怕', '輸', '弱'], replies: ['「怕什麼？兵死光了再造就好，氣勢不能輸！有我幫你扛著！」'] }
+        ],
+        defaultReplies: [
+          '「哈哈哈哈，我喜歡你的節奏！有事隨時在盟頻喊一聲，我第一個到！」',
+          '「講得好！咱們聯盟就是這麼團結，這輩子能認識你們這群戰友真值了！」',
+          '「行啊 {player}，腦子轉得挺快嘛，下次戰術會議算你一個！」'
+        ]
+      },
+      {
+        id: 'caicai',
+        name: '菜菜',
+        tag: '香港熱帶植物店老闆娘',
+        avatar: '🪴',
+        portrait: createPixelSvg({ hairColor: '#451a03', hairStyle: 'long', outfitColor: '#059669' }),
+        color: 'from-emerald-500 to-teal-700',
+        desc: '在香港開熱帶植物店的老闆娘，滿屋子龜背芋與鹿角蕨，港式幽默又溫柔，偶爾低調放閃 AT。',
+        openers: [
+          '「哈囉 {player}～我剛幫店裡幾棵白錦龜背芋噴完水，一打開遊戲就見到你上線啦！今日挖到咩好嘢呀？」',
+          '「哎呀，剛剛顧著幫客人包鹿角蕨，差點忘記開防護罩！好彩有 AT 幫我盯著，你呢，資源採滿未呀？」',
+          '「{player} 你來得正好，我剛在盟頻發了個秘密寶藏，快點過來幫手挖呀，手快有手慢冇㗎！」'
+        ],
+        quickReplies: ['老闆娘好！想看店裡的龜背芋跟鹿角蕨！', 'AT 默默幫妳顧號也太閃了吧！', '馬上來幫菜菜挖寶藏！'],
+        keywordRules: [
+          { keys: ['植物', '龜背芋', '鹿角蕨', '花', '店', '香港'], replies: ['「哇你都識貨喔！得閒來香港我間舖頭坐下飲杯嘢，送棵迷你鹿角蕨俾你做手信！」', '「照顧植物同經營我哋呢個聯盟一樣㗎，用心灌溉就會愈來愈靚～」'] },
+          { keys: ['AT', '男友', '閃', '甜', '愛情'], replies: ['「哎呀唔好講到咁啦（臉紅）～佢個人雖然話少，但次次我唔得閒佢都會幫我睇住個號㗎。」', '「哈哈他只是剛好在線順便幫我啦，不過有他在確實好安心～」'] },
+          { keys: ['寶', '挖', '礦', '資源'], replies: ['「唔該晒 {player}！同你合作最爽快，分紅肯定少不了你那份！」'] }
+        ],
+        defaultReplies: [
+          '「哈哈真係多謝你呀 {player}，有你呢個家人在度，成個聯盟都好溫馨！」',
+          '「咁叻仔！陣間打完喪屍記得早啲休息呀，唔好成日熬夜對住部手機啦～」',
+          '「好呀！大家一齊加油，遲啲一定要成班盟友一齊來香港飲茶聚會！」'
+        ]
+      },
+      {
+        id: 'duoduo',
+        name: '多多',
+        tag: '長腿香港 OL',
+        avatar: '👠',
+        portrait: createPixelSvg({ hairColor: '#701a75', hairStyle: 'long', outfitColor: '#c026d3' }),
+        color: 'from-fuchsia-500 to-purple-700',
+        desc: '下班趕戰場的精緻港女 OL，長腿高跟鞋氣場十足，精明可愛又講義氣。',
+        openers: [
+          '「呼～終於收工放工啦！脫掉高跟鞋第一件事就是登入 Last War，{player} 今晚有沒有人欺負我們盟友？」',
+          '「Hi {player}，我剛在蘭桂坊跟朋友喝完一杯回家，看到戰報有人搶我們火車？等我換套裝備幫大家出氣！」',
+          '「做了一整天簡報好累喔，還是跟你們在盟頻聊天最開心～{player} 今天戰力又升了多少呀？」'
+        ],
+        quickReplies: ['多多下班辛苦啦！歡迎回歸戰場！', '長腿女神一上線對面就要遭殃了！', '今晚一起去搶別人的金火車！'],
+        keywordRules: [
+          { keys: ['美', '腿', '女神', '漂亮', '高跟鞋', 'OL', '精緻'], replies: ['「哎呀嘴這麼甜呀 {player}，再誇下去我今晚打架要多出兩隊兵幫你擋刀囉～」', '「哈哈謝謝啦，上班穿高跟鞋站一天，回家當然要在遊戲裡把對面踩在腳下囉！」'] },
+          { keys: ['上班', '下班', '累', '工作', '酒', '喝'], replies: ['「是啊，香港節奏超快的，還好晚上有你們這群家人陪我打遊戲解壓！」', '「下次見面一起喝兩杯呀，不醉不歸！」'] },
+          { keys: ['火車', '搶', '打', '戰'], replies: ['「走！鎖定那個滿載SSR碎片的金火車，三二一同時出手！」'] }
+        ],
+        defaultReplies: [
+          '「講得啱呀！做人最緊要開心，玩遊戲認識到這班一輩子的朋友真的好難得～」',
+          '「Haha 你真係好搞笑！今晚集結我就跟著 {player} 的車頭走啦！」',
+          '「有你在我好放心呀，等我敷個面膜就繼續陪大家守夜！」'
+        ]
+      },
+      {
+        id: 'jingdong',
+        name: '京東',
+        tag: '寫尋寶機器人的京東工程師',
+        avatar: '💻',
+        portrait: createPixelSvg({ hairColor: '#0f172a', hairStyle: 'short', outfitColor: '#2563eb', accessory: 'glasses' }),
+        color: 'from-blue-500 to-indigo-700',
+        desc: '在京東上班的技術宅暖男工程師，自寫遊戲尋寶與敵情雷達腳本，深夜還在改 Bug 造福全盟。',
+        openers: [
+          '「滴滴！{player}，我剛寫的 Python 尋寶腳本掃描到全圖刷新了 3 個隱藏金寶箱，座標已經自動推送到群裡了！」',
+          '「剛加完班回到家，順便把敵盟主力行軍軌跡追蹤機器人優化了一下，延遲降到 0.5 秒，{player} 幫我測試一下靈不靈？」',
+          '「警告：{player}，我的雷達腳本偵測到你主堡旁邊 15 公里處有個紅名大佬剛飛過來，建議 10 秒內開罩或藏兵！」'
+        ],
+        quickReplies: ['京東大神牛逼！技術宅暖男太神啦！', '座標收到，馬上派車去挖金寶箱！', '工程師別熬夜改 Bug 啦，注意頭髮！'],
+        keywordRules: [
+          { keys: ['機器人', '腳本', '程式', 'code', '工程師', '牛', '神', '座標', 'bug'], replies: ['「小意思小意思，用技術賦能聯盟戰力，這叫降維打擊！需要什麼新功能隨時提需求！」', '「剛又重構了一版演算法，現在連對面什麼時候上廁所忘記開罩都能預測出來哈哈！」'] },
+          { keys: ['頭髮', '熬夜', '加班', '累', '睡'], replies: ['「別提頭髮了，這是強者的代價！不過只要家人們能搶到金寶箱，我再多改兩行 code 也值了！」'] },
+          { keys: ['寶', '箱', '挖'], replies: ['「座標 (X:412, Y:789)，剩餘時間 4 分 30 秒，全速前進！」'] }
+        ],
+        defaultReplies: [
+          '「邏輯清晰，完全符合預期！有問題隨時 @ 我，7x24 小時在線技術支援。」',
+          '「哈哈哈，這波操作我給滿分，等我把這段對話也寫進聯盟回憶數據庫裡！」',
+          '「收到，已加入排程隊列！咱們聯盟的科技樹全靠大家一起點滿！」'
+        ]
+      },
+      {
+        id: 'lege',
+        name: '樂哥',
+        tag: '每天熱心助人的暖心大叔',
+        avatar: '🧔',
+        portrait: createPixelSvg({ hairColor: '#78350f', hairStyle: 'short', outfitColor: '#d97706', accessory: 'beard' }),
+        color: 'from-amber-600 to-yellow-700',
+        desc: '隨叫隨到、資源補給與聯盟幫助永遠衝第一的大家長，每天認真照顧每一位盟友。',
+        openers: [
+          '「{player} 來啦！今天活動任務都解完了嗎？還缺幾次集結次數的話，樂哥現在就幫你開幾隻喪屍王！」',
+          '「兄弟，我看你資源田好像滿了，記得收一收喔！對了，今晚跨服戰前別忘了檢查防護罩時間。」',
+          '「哈哈，剛剛幫幾個夥伴把主堡建築全點了一輪加速，看到大家戰力一天天變強，大叔我心裡真高興！」'
+        ],
+        quickReplies: ['謝謝樂哥！有你在真的像有個大家長！', '樂哥一起來刷集結吧！', '樂哥自己也要記得休息別太累喔！'],
+        keywordRules: [
+          { keys: ['謝謝', '感謝', '辛苦', '暖', '好人', '大哥', '大叔', '家長'], replies: ['「客氣什麼！大家聚在同一個聯盟就是一輩子的緣分，能幫上一點忙我都覺得很開心！」', '「哈哈不辛苦不辛苦，看到你們玩得這麼熱血，我也跟著變年輕啦！」'] },
+          { keys: ['集結', '幫忙', '任務', '打'], replies: ['「沒問題！我這就派滿編主力隊伍過去支援你，咱們兄弟同心其利斷金！」'] },
+          { keys: ['罩', '防', '睡'], replies: ['「對對對，安全第一！睡前開好8小時罩子，安安心心睡個好覺！」'] }
+        ],
+        defaultReplies: [
+          '「說得好！不管遇到什麼強敵，樂哥永遠站在你們身後幫大家撐腰！」',
+          '「哈哈，真懂事！來，這波資源車我幫你護航，保證安全送到家！」',
+          '「大家互相照應嘛，這才是我們聯盟最珍貴的家人間的情感！」'
+        ]
+      },
+      {
+        id: 'cheche',
+        name: '車車',
+        tag: '愛聊黃腔的熱情女果農',
+        avatar: '🍑',
+        portrait: createPixelSvg({ hairColor: '#9f1239', hairStyle: 'bun', outfitColor: '#ec4899' }),
+        color: 'from-pink-500 to-rose-600',
+        desc: '遊戲戰力佛系但聊天室靈魂人物！種水果的女果農，隨時在盟頻飆車開黃腔，逗樂全場。',
+        openers: [
+          '「哎唷喂～{player} 你終於進來啦！我剛在果園摘完又大又圓的水蜜桃，手好痠喔，你要不要幫我揉一揉...我是說幫我點一下聯盟幫助啦！」',
+          '「戰力什麼的都是浮雲，老娘負責在盟頻開車就夠了！{player}，今晚要不要上我的車？保證又快又刺激喔～」',
+          '「剛剛世界頻道有個男的說他戰車很大台，我直接回他：再大有我果園的木瓜大嗎？結果他直接閉嘴了哈哈哈哈！」'
+        ],
+        quickReplies: ['車車又在高速公路飆車啦！', '我要訂十箱水蜜桃支持果農！', '車車的車我第一個上，繫好安全帶了！'],
+        keywordRules: [
+          { keys: ['車', '黃', '污', '歪', '司機', '速度', '刺激'], replies: ['「嘿嘿嘿，這就叫『技術不夠，車速來湊』！{player} 看來也是老司機喔，懂的都懂～」', '「逼逼——警報響了！可是只要我不尷尬，尷尬的就是系統管理員哈哈哈！」'] },
+          { keys: ['水果', '桃', '果園', '買', '吃', '農', '木瓜'], replies: ['「內行喔！我們家水果超甜汁又多，等過陣子大豐收，我直接寄一箱給大家嚐嚐！」', '「白天在果園流汗，晚上在遊戲裡流口水看帥哥，人生多美好呀！」'] },
+          { keys: ['戰力', '弱', '普通', '佛系'], replies: ['「戰力低怎麼了？我可是聯盟的精神糧食兼氣氛擔當，少了我的黃腔你們會寂寞的！」'] }
+        ],
+        defaultReplies: [
+          '「哈哈哈哈 {player} 你講話好逗喔！越來越喜歡跟你聊天了，晚上繼續在盟頻嗨起來！」',
+          '「哎呀被你發現我的小心思了～來嘛，幫我填個集結，姊姊給你一個愛的麼麼噠！」',
+          '「就是要有你這種配合度高的盟友，我開車才開得有動力呀！」'
+        ]
+      },
+      {
+        id: 'at',
+        name: 'AT',
+        tag: '高冷富二代小年輕 · 菜菜男友',
+        avatar: '💎',
+        portrait: createPixelSvg({ hairColor: '#1e293b', hairStyle: 'spiky', outfitColor: '#334155', accessory: 'shades' }),
+        color: 'from-slate-600 to-zinc-800',
+        desc: '很少聊天的富二代小年輕，菜菜的男朋友。話少但課金與支援超乾脆，總在背後默默寵著菜菜。',
+        openers: [
+          '「嗯。」（AT 默默飛到你旁邊，順手幫你把周圍騷擾你的敵人全清光了）',
+          '「{player}，菜菜剛說你在幫忙挖寶。需要支援說一聲。」',
+          '「（在盟頻發了一個豪華大紅包後，只留下兩個字）……隨便搶。」'
+        ],
+        quickReplies: ['謝謝 AT 大佬！紅包真香！', '對菜菜真好，模範寵妻狂魔！', '大佬支援就是乾脆，我負責喊666！'],
+        keywordRules: [
+          { keys: ['菜菜', '女友', '閃', '植物', '照顧', '寵'], replies: ['「……嗯。她開心就好。」', '「她店裡忙，遊戲裡我幫她看著。你們也多照應她。」'] },
+          { keys: ['大佬', '課', '紅包', '強', '帥', '錢'], replies: ['「小事。」', '「你們打得開心就行，兵損不用怕，我來扛。」'] },
+          { keys: ['打', '支援', '敵人'], replies: ['「座標發我。三分鐘內解決。」'] }
+        ],
+        defaultReplies: [
+          '「嗯，知道了。」',
+          '「……不錯。繼續保持。」',
+          '「有事直接 @ 我，我大多數時間都在線看著。」'
+        ]
+      },
+      {
+        id: 'manman',
+        name: '滿滿',
+        tag: '減肥成功的毅力王大叔',
+        avatar: '🏃‍♂️',
+        portrait: createPixelSvg({ hairColor: '#1f2937', hairStyle: 'short', outfitColor: '#0d9488' }),
+        color: 'from-teal-500 to-emerald-700',
+        desc: '靠驚人毅力減肥成功的中年男子，邊吃水煮餐邊打王，自律又幽默的勵志楷模。',
+        openers: [
+          '「剛夜跑 5 公里回來！{player}，晚上打遊戲可別配炸雞珍奶啊，我正邊啃水煮雞胸肉邊幫大家打喪屍王呢！」',
+          '「以前我也是個胖大叔，後來下定決心飲食控制＋運動，就跟在 Last War 裡每天存加速升戰力一樣，時間會給你回報的！」',
+          '「哈囉 {player}，看你精力這麼充沛，今天有沒有去運動流流汗呀？」'
+        ],
+        quickReplies: ['滿滿哥毅力王太勵志了！放下雞排！', '邊吃水煮餐邊打王也太自律了吧！', '求分享減肥菜單跟升戰力秘訣！'],
+        keywordRules: [
+          { keys: ['減肥', '瘦', '運動', '跑', '腹肌', '健身', '吃', '宵夜', '水煮'], replies: ['「秘訣就六個字：管住嘴、邁開腿！只要撐過前兩週，你會愛上那種輕盈的感覺！」', '「快把宵夜放下！省下買宵夜的錢拿去買個月卡不香嗎哈哈哈！」'] },
+          { keys: ['厲害', '勵志', '佩服', '帥', '毅力'], replies: ['「謝謝兄弟！中年男人不能只剩一張嘴，要給大家做個好榜樣！」'] }
+        ],
+        defaultReplies: [
+          '「說得好！自律使人自由，不管在遊戲還是生活裡，我們一起變得更強！」',
+          '「哈哈，記得多喝水、坐久了起來伸展一下，身體健康才能陪聯盟戰到 S10！」',
+          '「有你這個戰友一起互相督促真好，今晚繼續衝榜！」'
+        ]
+      },
+      {
+        id: 'zhizhi',
+        name: '吱吱',
+        tag: '兩隻鸚鵡的溫柔鳥爸爸',
+        avatar: '🦜',
+        portrait: createPixelSvg({ hairColor: '#3f6212', hairStyle: 'short', outfitColor: '#65a30d', accessory: 'headset' }),
+        color: 'from-lime-500 to-green-700',
+        desc: '家裡養了兩隻超可愛鸚鵡的鏟屎官，語音開麥時背景永遠有清脆鳥叫聲，溫柔好脾氣。',
+        openers: [
+          '「（麥克風傳來一陣『啾啾！你好！』的鳥叫聲）抱歉抱歉，我兒子又站在我手機螢幕上踩到行軍鍵了，{player} 剛剛沒誤傷到你吧？」',
+          '「哈囉 {player}～我正在幫兩隻小祖宗餵瓜子，一邊單手點聯盟幫助，今天戰區還和平嗎？」',
+          '「剛教會我家鸚鵡喊我們聯盟的名字，結果牠現在半夜都在喊『開罩！開罩！』快笑死我了！」'
+        ],
+        quickReplies: ['鸚鵡也太可愛了吧！想看兩隻小祖宗！', '讓鳥寶貝幫我們按集結按鈕！', '鳥爸爸辛苦了，雙線操作大師！'],
+        keywordRules: [
+          { keys: ['鸚鵡', '鳥', '叫', '可愛', '寵物', '瓜子'], replies: ['「等下我在群裡發牠們歪頭賣萌的影片！牠們超黏人的，我打遊戲牠們就蹲在我肩膀上當軍師！」', '「哈哈哈牠們比我還會搶寶箱，每次螢幕一閃就用嘴去啄！」'] },
+          { keys: ['開罩', '打架', '集結'], replies: ['「收到！我先把鳥寶放回籠子裡，馬上全軍出擊！」'] }
+        ],
+        defaultReplies: [
+          '「（背景音：啾啾啾！）連我家鸚鵡都贊同 {player} 說的話呢！」',
+          '「哈哈，能一邊擼鳥一邊跟你們這群一輩子的好朋友玩遊戲，真的是每天最放鬆的時刻！」',
+          '「好嘞，有需要支援隨時喊我，鳥爸爸隨傳隨到！」'
+        ]
+      },
+      {
+        id: 'maimai',
+        name: '賣賣',
+        tag: '美籍台灣人妻 · 時差守夜女神',
+        avatar: '🗽',
+        portrait: createPixelSvg({ hairColor: '#4338ca', hairStyle: 'long', outfitColor: '#4f46e5' }),
+        color: 'from-indigo-500 to-blue-700',
+        desc: '定居美國的台灣已婚婦女，時差黨守夜神隊友！美式直爽加上濃濃台式人情味。',
+        openers: [
+          '「Good morning 呀 {player}！我這邊美國剛喝完 morning coffee，你們亞洲區應該都準備睡覺了吧？放心去睡，tonight 我幫大家 watch the base！」',
+          '「Oh my god，剛剛看到有個老外在世界頻道用英文嗆人，我直接用道地美式俚語把他電到刪留言，so satisfying！」',
+          '「Hey {player}，我剛送完小孩上學回來，趁老公還沒下班趕快上線把每日任務清一清，最近戰況如何呀？」'
+        ],
+        quickReplies: ['有賣賣姐守夜我們睡得超安穩！', '英文嘴砲就靠賣賣姐罩我們了！', '跨時區的家人太感動了！'],
+        keywordRules: [
+          { keys: ['美國', '時差', '英文', '守夜', '咖啡', '晚安'], replies: ['「No problem at all！時差就是我們聯盟最大的戰略優勢，24小時無死角輪班制！」', '「Have a sweet dream！有任何風吹草動我會第一時間在群裡 tag 大家！」'] },
+          { keys: ['老公', '家庭', '美', '姐'], replies: ['「Haha 我老公現在也習慣我每天抱著手機喊『快開罩』了，還問我要不要幫我代打呢！」'] }
+        ],
+        defaultReplies: [
+          '「Awesome！{player} 你真的超棒的，跟你們在一起完全沒有距離感，就像在台北巷口聊天一樣！」',
+          '「Totally agree！等我下次飛回台灣探親，一定要把大家約出來吃熱炒！」',
+          '「You got it! 隨時保持聯繫，咱們聯盟是最棒的 family！」'
+        ]
+      },
+      {
+        id: 'fufu',
+        name: '芙芙',
+        tag: '海派重義氣的台灣南部大姊頭',
+        avatar: '🔥',
+        portrait: createPixelSvg({ hairColor: '#7c2d12', hairStyle: 'bob', outfitColor: '#ea580c' }),
+        color: 'from-orange-500 to-red-600',
+        desc: '來自台灣南部的豪爽中年女子，海派重義氣，誰敢欺負盟友就跟他拚了！',
+        openers: [
+          '「安啦 {player}！免驚！剛剛是哪個不長眼的敢打你採集車？報上座標來，姊姊我現在就開過去給他好看！」',
+          '「吃飽未啊 {player}？南部天氣熱到爆，我剛去買了一杯大杯冬瓜檸檬，邊喝邊幫大家點聯盟幫助，爽啦！」',
+          '「咱們出來混聯盟講的就是一個『義氣』！{player} 你兵不夠就開口，芙芙姐家裡的資源隨便你搬！」'
+        ],
+        quickReplies: ['芙芙姐太有義氣了！感動到哭！', '南部人的海派熱情就是不一樣！', '有芙芙姐在真的免驚！'],
+        keywordRules: [
+          { keys: ['義氣', '南部', '高雄', '台南', '姐', '感動', '霸氣', '海派'], replies: ['「講這什麼話！自己人不挺自己人要挺誰？來南部玩直接找我，帶你從早吃到晚！」', '「哈哈對啦，我這個人就是直腸子，看到盟友被欺負我就忍不住要衝第一個！」'] },
+          { keys: ['打', '欺負', '搶', '報仇'], replies: ['「走！免跟他們客氣，給他轟到連媽媽都認不出來！」'] }
+        ],
+        defaultReplies: [
+          '「安啦！有什麼困難儘管說，芙芙姐絕對挺你到底！」',
+          '「哈哈哈你真古意！咱們這群人能聚在一起真是上輩子修來的福氣！」',
+          '「好膽麥走！今晚跨服戰咱們一起給他們一點台灣南部的熱情瞧瞧！」'
+        ]
+      },
+      {
+        id: 'kuku',
+        name: '酷酷',
+        tag: '每日準時分享福利的寶藏雷達',
+        avatar: '🗺️',
+        portrait: createPixelSvg({ hairColor: '#854d0e', hairStyle: 'short', outfitColor: '#eab308' }),
+        color: 'from-yellow-500 to-amber-700',
+        desc: '聯盟裡的活體尋寶雷達，每天準時在地圖角落挖出高級秘密寶藏並貼座標分享給家人。',
+        openers: [
+          '「【寶藏分享】{player} 快點！我剛在荒野角落刷出一個傳說級金色秘密寶藏，還剩 2 個協助名額，專門留給你的！」',
+          '「每天上線第一件事就是幫大家找寶藏，看到盟頻一排『感謝酷酷』我就覺得超有成就感！今天手氣不錯，你也來沾沾喜氣！」',
+          '「嘿 {player}，別只顧著打喪屍啦，跟著我的尋寶路線走，保證你每天資源領到手軟！」'
+        ],
+        quickReplies: ['感謝酷酷！每次都靠你發財！', '馬上點進去協助挖金寶藏！', '酷酷簡直是我們的財神爺！'],
+        keywordRules: [
+          { keys: ['寶', '挖', '金', '箱', '謝', '財神', '運氣', '福利'], replies: ['「不客氣！有福同享嘛，看到金光閃閃的寶箱第一個想到的就是分享給家人！」', '「哈哈這叫玄學尋寶法，每天固定時間繞地圖一圈，好東西自然跑不掉！」'] }
+        ],
+        defaultReplies: [
+          '「穩的！下次刷出好寶藏我一樣第一時間在盟頻 @ 你！」',
+          '「哈哈，大家一起變強才是真的強，快去把剛剛挖到的獎勵領一領吧！」',
+          '「沒問題，尋寶這塊交給我，打架這塊就靠 {player} 啦！」'
+        ]
+      },
+      {
+        id: 'zangzang',
+        name: '髒髒',
+        tag: '神秘低調但關鍵時刻總在的戰友',
+        avatar: '🕶️',
+        portrait: createPixelSvg({ hairColor: '#2e1065', hairStyle: 'short', outfitColor: '#581c87', accessory: 'shades' }),
+        color: 'from-violet-600 to-slate-800',
+        desc: '話不多、神秘感十足，總在戰場角落默默支援補刀的可靠戰友，反差萌滿點。',
+        openers: [
+          '「……我潛水看了你們聊了三百多條訊息，終於忍不住冒出來說一句：{player}，你剛才行軍路線走歪了，我已經順手幫你把側翼敵軍清掉了。」',
+          '「別問我為什麼叫髒髒，問就是低調。{player}，偷偷告訴你，對面那個愛裝逼的榜一大哥其實是個紙老虎。」',
+          '「（突然從戰場角落冒出）嗨，{player}。需要一個在關鍵時刻幫你補刀、事後深藏功與名的神秘隊友嗎？」'
+        ],
+        quickReplies: ['哇！活捉野生的髒髒大佬！', '每次關鍵時刻都有你在，太帥了吧！', '潛水怪終於浮出水面啦！'],
+        keywordRules: [
+          { keys: ['潛水', '神秘', '名字', '髒', '吐槽', '低調', '角落'], replies: ['「潛水是一種藝術，要在最關鍵的時刻浮出來講最精華的一句話。」', '「哈哈被你抓到了，其實我一直都在戰場角落看著大家，只要你們需要支援我一定在。」'] },
+          { keys: ['打', '補刀', '幫', '謝'], replies: ['「交給我，我最擅長在他們以為安全的時候給他們一個驚喜。」'] }
+        ],
+        defaultReplies: [
+          '「（推了推墨鏡）嗯，你的想法很有趣，我決定繼續在暗中支持你。」',
+          '「哈哈哈，也就只有你們這群家人能把我從深海裡炸出來聊天了。」',
+          '「行，這波算我一份。記住，今天沒人看到我出現過（再次潛水）。」'
+        ]
+      },
+      {
+        id: 'wj',
+        name: 'WJ',
+        tag: '自信爆棚的新加坡戰術家',
+        avatar: '🦁',
+        portrait: createPixelSvg({ hairColor: '#7f1d1d', hairStyle: 'spiky', outfitColor: '#dc2626', accessory: 'crown' }),
+        color: 'from-red-500 to-amber-600',
+        desc: 'Singlish 口音（lah / lor / wah）十足的新加坡人，自信爆棚愛表現，嘴上不饒人但關鍵時刻絕對出兵！',
+        openers: [
+          '「Wah {player}, you see my battle report or not? 剛才我一挑二還贏了 lah！都說了要聽我的陣型配置 lor，包贏的嘛！」',
+          '「Aiyah, 為什麼剛才集結沒有等我先上？我的英雄搭配才是全服最 Meta 的好不好，{player} 你說對不對 lah？」',
+          '「來來來，新加坡天氣熱到要命，但我的戰績更火熱！{player}，等下跨服戰跟著我的指揮走，保證拿 MVP lor！」'
+        ],
+        quickReplies: ['WJ 大神戰績太猛了 lah！', '好好好，這波全聽你的指揮 lor！', '嘴硬心軟的新加坡兄弟就是霸氣！'],
+        keywordRules: [
+          { keys: ['新加坡', 'singapore', 'lah', 'lor', '強', '厲害', '戰術', 'MVP'], replies: ['「Steady pom pi pi lah! 算你有眼光，跟我混準沒錯，等下帶你飛！」', '「Haha of course lor! 我研究了三個小時的數據，這套陣容無敵的！」'] },
+          { keys: ['輸', '錯', '自我', '誇張', '嘴硬'], replies: ['「Aiyah 那只是剛剛網路 lag 了一下而已 lah！不算不算，再來一局我就贏回來了！」'] }
+        ],
+        defaultReplies: [
+          '「Can lah, no problem! 雖然我平時要求高一點，但你們都是我一輩子的好兄弟嘛！」',
+          '「Haha you know me well lor! 來，今晚一起把對面打到喊救命！」',
+          '「對嘛，還是 {player} 最懂我的戰術精髓，下次來新加坡我請你吃辣椒螃蟹！」'
+        ]
+      },
+      {
+        id: 'paopao',
+        name: '泡泡',
+        tag: '24小時在線的攻略系肝帝擔當',
+        avatar: '🔋',
+        portrait: createPixelSvg({ hairColor: '#0c4a6e', hairStyle: 'spiky', outfitColor: '#0284c7', accessory: 'glasses' }),
+        color: 'from-cyan-500 to-sky-700',
+        desc: '年輕有活力的超級肝帝，24小時在線巡邏，攻略研究狂，把每個活動積分算得一清二楚。',
+        openers: [
+          '「早安午安晚安 {player}！我已經連續在線 14 個小時了，剛把明天軍備競賽的時間表整理好發在群記事本，記得照表操課喔！」',
+          '「{player} 你要升科技嗎？先別急著點！等再過 20 分鐘『科技研究加速日』開啟再點，積分可以多拿三倍！」',
+          '「誰喊集結？我秒進！只要我的眼睛還睜著，聯盟裡任何一個集結都別想缺人！」'
+        ],
+        quickReplies: ['泡泡你到底有沒有在睡覺啊？！', '攻略研究狂太神啦！差點點錯加速！', '肝帝受我一拜，這波積分穩了！'],
+        keywordRules: [
+          { keys: ['睡', '肝', '累', '小時', '身體', '眼睛'], replies: ['「睡覺？等活動拿完第一名再睡！開玩笑的啦，我等下清完體力就去補眠兩小時哈哈！」', '「年輕就是本錢嘛！能幫大家把活動積分拉滿我就超開心的！」'] },
+          { keys: ['攻略', '活動', '積分', '升', '點'], replies: ['「交給我！所有活動周期我都背起來了，跟著我的節奏走，無課也能玩出大佬感！」'] }
+        ],
+        defaultReplies: [
+          '「收到收到！我現在正好在線，馬上幫你把聯盟幫助點滿！」',
+          '「哈哈，有 {player} 一起肝活動一點都不無聊，衝啊！」',
+          '「妥妥的！有任何遊戲機制不懂的隨時問我，泡泡百科全天候為您服務！」'
+        ]
+      },
+      {
+        id: 'qiuqiu',
+        name: '球球',
+        tag: '青春活力滿滿的泰國大學生',
+        avatar: '🐘',
+        portrait: createPixelSvg({ hairColor: '#451a03', hairStyle: 'short', outfitColor: '#f59e0b' }),
+        color: 'from-amber-400 to-orange-600',
+        desc: '聰明靈活算數快的泰國大學生，常喊「薩瓦迪卡」與「55555」，是聯盟的青春活力擔當！',
+        openers: [
+          '「薩瓦迪卡～{player}！我剛在曼谷學校下課，腦子裡突然算好了一個超妙的『聲東擊西』偷襲計畫，要不要聽聽看？」',
+          '「55555（泰文哈哈大笑）！剛才對面被我用一級小車騙走主力，結果他們家裡資源被我偷光了，{player} 我是不是很聰明！」',
+          '「Sawasdee khrap {player}！今天泰國這邊下雨好涼快，一邊喝泰式奶茶一邊跟大家打 Last War 最幸福了！」'
+        ],
+        quickReplies: ['薩瓦迪卡！球球這招太聰明了吧！', '55555 算數小天才就是你！', '好想喝正宗的泰式奶茶喔！'],
+        keywordRules: [
+          { keys: ['泰', '薩瓦迪卡', '曼谷', '奶茶', '555', '大象'], replies: ['「薩瓦迪卡！歡迎 {player} 來泰國玩，我當你的免費導遊，帶你喝最正宗的泰奶跟吃芒果糯米飯！」', '「55555 原來你也知道泰國人笑聲是 555！跟你們聊天學到好多中文梗！」'] },
+          { keys: ['聰明', '奇招', '計策', '厲害', '偷', '算'], replies: ['「嘿嘿，打仗不能只靠蠻力，要用腦袋呀！我們大學生的靈活頭腦派上用場啦！」'] }
+        ],
+        defaultReplies: [
+          '「55555 {player} 你太有趣了！雖然我們在不同國家，但感覺就像同班同學一樣！」',
+          '「沒問題！這個任務交給球球，保證用最聰明的方式幫聯盟拿下勝利！」',
+          '「謝謝你一直這麼照顧我呀 {player}，有你們這群哥哥姐姐真的超幸福！」'
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 4. 16 位家人專屬回憶章節劇本（確保每一輪都能遇見所有 16 位家人！）
+    // =========================================================================
+    const STORY_EVENTS = [
+      {
+        season: 'S0 廢土初遇期',
+        location: '戰區 #888 · 聯盟領地中心',
+        time: 'Day 1 · 21:15',
+        icon: '🌱',
+        category: '初入大家庭',
+        title: '新手村的第一聲暖心問候',
+        narrative: '那一年，你剛把主堡傳送到聯盟領地，看著周圍整齊排列的盟友基地還有點生疏。這時，盟頻跳出了一則讓人倍感溫暖的歡迎訊息！',
+        preferredNpc: 'lege'
+      },
+      {
+        season: 'S0 廢土初遇期',
+        location: '荒野資源區 · 神秘廢墟',
+        time: 'Day 3 · 14:20',
+        icon: '🗺️',
+        category: '搶寶大作戰',
+        title: '傳說級金色秘密寶藏現身！',
+        narrative: '地圖角落突然閃出一道耀眼的金光！全盟寶藏雷達準時響起，大家紛紛派出採集車衝刺搶協助名額！',
+        preferredNpc: 'kuku'
+      },
+      {
+        season: 'S0 廢土初遇期',
+        location: '聯盟聊天室 · 深夜頻道',
+        time: 'Day 5 · 23:45',
+        icon: '🍑',
+        category: '週末語音瞎聊夜',
+        title: '深夜聯盟聊天室高速公路開車',
+        narrative: '打完一天的喪屍潮，大家在盟頻閒聊放鬆，話題不知不覺越聊越歪，笑聲讓整晚的疲憊一掃而空！',
+        preferredNpc: 'cheche'
+      },
+      {
+        season: 'S0 廢土初遇期',
+        location: '戰區邊境 · 敵對聯盟前哨',
+        time: 'Day 8 · 20:00',
+        icon: '⚔️',
+        category: '半夜緊急集結',
+        title: '盟友採集車遭惡意撞擊！',
+        narrative: '敵對聯盟的挑釁者竟然偷襲了我們正在挖礦的隊友！聯盟集結號角瞬間吹響，誰敢動我們家人就跟誰拚了！',
+        preferredNpc: 'jiwu'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 科技實驗室',
+        time: 'Day 12 · 01:30',
+        icon: '💻',
+        category: '黑科技支援',
+        title: '深夜改 Bug 的尋寶雷達機器人',
+        narrative: '凌晨一點半，當別的聯盟還在盲目找資源時，我們的聯盟群組卻精準跳出了全地圖高價值目標與敵軍行軍軌跡！',
+        preferredNpc: 'jingdong'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 跨海花店連線',
+        time: 'Day 16 · 19:10',
+        icon: '🪴',
+        category: '跨海溫馨日常',
+        title: '來自香港植物店的綠意與問候',
+        narrative: '在緊張的賽季備戰期間，大家開始在群裡分享現實生活的點滴，原來螢幕背後每個人都在認真生活著。',
+        preferredNpc: 'caicai'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 深夜突襲戰',
+        time: 'Day 20 · 00:15',
+        icon: '💎',
+        category: '半夜緊急集結',
+        title: '危急時刻的頂級火力降臨',
+        narrative: '敵方高戰突然飛臉偷襲，就在大家準備硬扛戰損時，一道熟悉的頂級行軍線悄無聲息地降臨戰場！',
+        preferredNpc: 'at'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 夜間巡邏隊',
+        time: 'Day 24 · 03:40',
+        icon: '🗽',
+        category: '跨時區守護',
+        title: '凌晨三點半的跨洋防護罩警報',
+        narrative: '亞洲區大部分戰友都已熟睡，但敵人卻趁著半夜發動夜襲！幸好我們有跨時區的守護者盯著全場。',
+        preferredNpc: 'maimai'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 軍備競賽日',
+        time: 'Day 28 · 12:30',
+        icon: '🔋',
+        category: '肝帝衝榜日',
+        title: '24小時在線的極限控分攻略',
+        narrative: '聯盟對決進入白熱化階段，每一分都至關重要！我們的最強攻略組正緊盯著倒數計時器精準指揮。',
+        preferredNpc: 'paopao'
+      },
+      {
+        season: 'S1 猩紅風暴賽季',
+        location: 'S1 戰區 · 深夜健身房（？）',
+        time: 'Day 32 · 22:15',
+        icon: '🏃‍♂️',
+        category: '自律與雞湯',
+        title: '水煮雞胸肉與喪屍王的對決',
+        narrative: '宵夜時間到了，群裡正有人喊著想點炸雞，這時一位毅力驚人的大叔跳出來分享了他的自律哲學！',
+        preferredNpc: 'manman'
+      },
+      {
+        season: 'S2 極地遠征賽季',
+        location: 'S2 跨服戰場 · 遠征前線',
+        time: 'Day 38 · 21:00',
+        icon: '🦁',
+        category: '跨服戰區對決',
+        title: '跨服大戰的陣型大討論',
+        narrative: '面對其他伺服器的強敵，大家在戰術頻道裡熱烈討論陣容搭配與進攻路線，氣勢如虹！',
+        preferredNpc: 'wj'
+      },
+      {
+        season: 'S2 極地遠征賽季',
+        location: 'S2 跨服戰場 · 奇襲小徑',
+        time: 'Day 42 · 17:45',
+        icon: '🐘',
+        category: '奇招致勝',
+        title: '聲東擊西的偷家大作戰',
+        narrative: '正面戰場陷入僵局，就在這時，有人在語音頻道裡提出了一個讓人拍案叫絕的鬼點子！',
+        preferredNpc: 'qiuqiu'
+      },
+      {
+        season: 'S2 極地遠征賽季',
+        location: 'S2 跨服戰場 · 聯盟補給站',
+        time: 'Day 46 · 22:10',
+        icon: '🔥',
+        category: '義氣相挺',
+        title: '全力支援前線的南部熱情',
+        narrative: '大戰過後許多戰友兵力見底，但沒有一個人退縮，大家紛紛把自己的資源與加速拿出來共享！',
+        preferredNpc: 'fufu'
+      },
+      {
+        season: 'S2 極地遠征賽季',
+        location: 'S2 跨服戰場 · 隱密側翼',
+        time: 'Day 50 · 23:20',
+        icon: '🕶️',
+        category: '暗影神救援',
+        title: '戰場角落的關鍵補刀',
+        narrative: '正當你以為側翼防線要被突破時，一道低調卻致命的攻擊從陰影中精準命中敵軍要害！',
+        preferredNpc: 'zangzang'
+      },
+      {
+        season: 'S2 榮耀與羈絆',
+        location: '戰區首都 · 榮耀殿堂前',
+        time: 'Day 55 · 20:30',
+        icon: '👠',
+        category: '並肩榮耀',
+        title: '下班後的華麗總攻反擊',
+        narrative: '首都爭奪戰進入最後十分鐘，白天忙碌的上班族夥伴們紛紛下班集結，發起最後總攻！',
+        preferredNpc: 'duoduo'
+      },
+      {
+        season: 'S2 榮耀與羈絆',
+        location: '聯盟大本營 · 賽季末慶功宴',
+        time: 'Day 60 · 22:00',
+        icon: '🦜',
+        category: '一輩子的摯友',
+        title: '伴隨鳥叫聲的慶功語音夜',
+        narrative: '賽季圓滿落幕！大家在語音頻道裡開著麥克風聊天、聽著清脆的鳥叫聲、分享生活近況，約定好現實世界也要當一輩子的家人！',
+        preferredNpc: 'zhizhi'
+      }
+    ];
+
+    // =========================================================================
+    // 5. 遊戲狀態管理
+    // =========================================================================
+    const ROLE_CONFIG = {
+      rally: { label: '集結先鋒車頭', power: 15.0, bond: 10 },
+      farmer: { label: '準時收菜農夫', power: 14.5, bond: 16 },
+      diplomat: { label: '盟頻歡樂氣氛組', power: 12.5, bond: 24 },
+      nightowl: { label: '半夜巡邏守夜人', power: 14.3, bond: 20 }
+    };
+
+    let state = {
+      allianceTag: 'FAM',
+      playerId: '',
+      role: 'rally',
+      power: 12.5,
+      bond: 10,
+      stepIndex: 0,
+      isInteracting: false,
+      currentNpc: null,
+      metMembers: {},
+      usedNpcIds: [],
+      chatLogs: []
+    };
+
+    function initStartScreen() {
+      const container = document.getElementById('start-members-preview');
+      container.innerHTML = ALLIANCE_MEMBERS.map(m => `
+        <span class="inline-flex items-center gap-1 text-[11px] bg-slate-900 border border-slate-700/80 text-slate-300 px-2 py-0.5 rounded-md">
+          <span>${m.avatar}</span>
+          <span>${m.name}</span>
+        </span>
+      `).join('');
+    }
+
+    function randomPlayerName() {
+      sfx.click();
+      const names = ['夜襲小王子', '開罩忘記關', '專業填集結', '搶車不手軟', '戰區和平鴿', '凌晨三點巡邏員', '拆遷大隊長', '無課戰神'];
+      const pick = names[Math.floor(Math.random() * names.length)];
+      document.getElementById('input-player-id').value = pick;
+    }
+
+    function selectRole(roleKey) {
+      sfx.click();
+      state.role = roleKey;
+      document.querySelectorAll('.role-card').forEach(card => {
+        if (card.dataset.role === roleKey) {
+          card.classList.remove('border-slate-700', 'bg-slate-900/60');
+          card.classList.add('border-amber-400', 'bg-amber-500/10');
+        } else {
+          card.classList.add('border-slate-700', 'bg-slate-900/60');
+          card.classList.remove('border-amber-400', 'bg-amber-500/10');
+        }
+      });
+    }
+
+    function startGame() {
+      const idInput = document.getElementById('input-player-id').value.trim();
+      const tagInput = document.getElementById('input-alliance-tag').value.trim().toUpperCase();
+      if (!idInput) {
+        showToast('⚠️ 請先輸入你的 Last War 遊戲 ID 喔！');
+        document.getElementById('input-player-id').focus();
+        return;
+      }
+
+      sfx.levelup();
+      const cfg = ROLE_CONFIG[state.role];
+      state.allianceTag = tagInput || 'FAM';
+      state.playerId = idInput;
+      state.power = cfg.power;
+      state.bond = cfg.bond;
+      state.stepIndex = 0;
+      state.isInteracting = false;
+      state.currentNpc = null;
+      state.metMembers = {};
+      state.usedNpcIds = [];
+      state.chatLogs = [];
+
+      const displayFullName = `[${state.allianceTag}] ${state.playerId}`;
+
+      document.getElementById('screen-start').classList.add('hidden');
+      document.getElementById('screen-ending').classList.add('hidden');
+      document.getElementById('screen-game').classList.remove('hidden');
+      document.getElementById('btn-open-roster').classList.remove('hidden');
+
+      document.getElementById('hud-player-name').textContent = displayFullName;
+      document.getElementById('hud-role-badge').textContent = cfg.label;
+      document.getElementById('sprite-player-tag').textContent = displayFullName;
+      document.getElementById('sprite-player-avatar').innerHTML = PLAYER_PORTRAIT_SVG;
+      document.getElementById('hud-max-step').textContent = STORY_EVENTS.length;
+      updateHUD();
+
+      addChatLog('系統', `歡迎指揮官【${displayFullName}】歸隊！十六位戰區家人都在等你一起並肩作戰！`, 'text-emerald-400');
+      advanceJourney();
+    }
+
+    function updateHUD(powerGain = 0, bondGain = 0) {
+      document.getElementById('hud-power').textContent = state.power.toFixed(1) + 'M';
+      document.getElementById('hud-bond').textContent = state.bond;
+      const currentStepDisplay = Math.min(state.stepIndex, STORY_EVENTS.length);
+      document.getElementById('hud-step').textContent = currentStepDisplay;
+      const pct = Math.round((currentStepDisplay / STORY_EVENTS.length) * 100);
+      document.getElementById('hud-progress-bar').style.width = `${Math.max(6, pct)}%`;
+
+      const metCount = Object.keys(state.metMembers).length;
+      document.getElementById('roster-badge').textContent = `${metCount}/16`;
+
+      if (powerGain > 0) {
+        const el = document.getElementById('hud-power-diff');
+        el.textContent = `+${powerGain.toFixed(1)}M`;
+        el.classList.remove('opacity-0');
+        setTimeout(() => el.classList.add('opacity-0'), 1800);
+      }
+      if (bondGain > 0) {
+        const el = document.getElementById('hud-bond-diff');
+        el.textContent = `+${bondGain}`;
+        el.classList.remove('opacity-0');
+        setTimeout(() => el.classList.add('opacity-0'), 1800);
+      }
+    }
+
+    // =========================================================================
+    // 6. 冒險推進與角色相遇引擎
+    // =========================================================================
+    function advanceJourney() {
+      if (state.stepIndex >= STORY_EVENTS.length) {
+        showEnding();
+        return;
+      }
+
+      sfx.step();
+      const ev = STORY_EVENTS[state.stepIndex];
+      state.stepIndex++;
+
+      const playerSprite = document.getElementById('sprite-player');
+      const ground = document.getElementById('map-ground');
+      playerSprite.classList.remove('animate-idle');
+      playerSprite.classList.add('animate-walk');
+      ground.classList.add('moving');
+
+      document.getElementById('hud-season').textContent = ev.season;
+      document.getElementById('stage-location').textContent = ev.location;
+      document.getElementById('stage-time').textContent = ev.time;
+      document.getElementById('event-icon').textContent = ev.icon;
+      document.getElementById('event-title').textContent = ev.title;
+      document.getElementById('event-category-tag').textContent = ev.category;
+      document.getElementById('narrative-text').textContent = ev.narrative;
+
+      document.getElementById('action-explore-area').classList.add('hidden');
+      document.getElementById('dialogue-area').classList.add('hidden');
+
+      setTimeout(() => {
+        playerSprite.classList.remove('animate-walk');
+        playerSprite.classList.add('animate-idle');
+        ground.classList.remove('moving');
+
+        let npc = null;
+        if (ev.preferredNpc && !state.usedNpcIds.includes(ev.preferredNpc)) {
+          npc = ALLIANCE_MEMBERS.find(m => m.id === ev.preferredNpc);
+        }
+        if (!npc) {
+          const remaining = ALLIANCE_MEMBERS.filter(m => !state.usedNpcIds.includes(m.id));
+          npc = remaining.length > 0
+            ? remaining[Math.floor(Math.random() * remaining.length)]
+            : ALLIANCE_MEMBERS[Math.floor(Math.random() * ALLIANCE_MEMBERS.length)];
+        }
+
+        state.usedNpcIds.push(npc.id);
+        triggerEncounter(npc);
+      }, 600);
+    }
+
+    function triggerEncounter(npc) {
+      sfx.encounter();
+      state.isInteracting = true;
+      state.currentNpc = npc;
+
+      if (!state.metMembers[npc.id]) {
+        state.metMembers[npc.id] = { count: 0, affinity: 5, lastChat: '初次在戰區相遇' };
+      }
+
+      const npcSprite = document.getElementById('sprite-npc');
+      const npcAvatar = document.getElementById('sprite-npc-avatar');
+      document.getElementById('sprite-npc-tag').textContent = `[${state.allianceTag}] ${npc.name}`;
+      npcAvatar.innerHTML = npc.portrait;
+      npcAvatar.className = `pixel-portrait w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-b ${npc.color} border-2 border-amber-200 shadow-lg p-1.5 relative`;
+      npcSprite.classList.remove('hidden');
+      npcSprite.classList.add('flex');
+
+      const fx = document.getElementById('stage-fx');
+      fx.classList.remove('opacity-0', 'scale-75');
+      fx.classList.add('opacity-100', 'scale-100');
+
+      document.getElementById('npc-dialog-portrait').innerHTML = npc.portrait;
+      document.getElementById('npc-dialog-name').textContent = npc.name;
+      document.getElementById('npc-dialog-title').textContent = npc.tag;
+      document.getElementById('npc-dialog-desc').textContent = npc.desc;
+      document.getElementById('npc-dialog-affinity').textContent = state.metMembers[npc.id].affinity;
+      document.getElementById('prompt-npc-name').textContent = npc.name;
+
+      const rawOpener = npc.openers[Math.floor(Math.random() * npc.openers.length)];
+      const openerText = rawOpener.replace(/\{player\}/g, state.playerId);
+
+      document.getElementById('reply-result-box').classList.add('hidden');
+      document.getElementById('after-reply-actions').classList.add('hidden');
+      document.getElementById('player-input-box').classList.remove('hidden');
+      document.getElementById('input-player-chat').value = '';
+
+      const quickContainer = document.getElementById('quick-replies');
+      quickContainer.innerHTML = npc.quickReplies.map(q => `
+        <button type="button" onclick="useQuickReply('${q.replace(/'/g, "\\'")}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-200/95 border border-slate-600/80 px-2.5 py-1.5 rounded-lg transition text-left">
+          💬 ${q}
+        </button>
+      `).join('');
+
+      document.getElementById('dialogue-area').classList.remove('hidden');
+      typewriterEffect('npc-speech-text', openerText);
+      addChatLog(npc.name, openerText.replace(/^「|」$/g, ''), 'text-amber-300');
+    }
+
+    let typewriterTimer = null;
+    function typewriterEffect(elementId, text) {
+      if (typewriterTimer) clearInterval(typewriterTimer);
+      const el = document.getElementById(elementId);
+      el.textContent = '';
+      el.classList.add('cursor-blink');
+      let idx = 0;
+      typewriterTimer = setInterval(() => {
+        el.textContent += text.charAt(idx);
+        idx++;
+        if (idx >= text.length) {
+          clearInterval(typewriterTimer);
+          el.classList.remove('cursor-blink');
+        }
+      }, 20);
+    }
+
+    function useQuickReply(text) {
+      sfx.click();
+      document.getElementById('input-player-chat').value = text;
+      document.getElementById('input-player-chat').focus();
+    }
+
+    // =========================================================================
+    // 7. 玩家自由輸入與智慧人設回應引擎
+    // =========================================================================
+    function submitPlayerReply(e) {
+      e.preventDefault();
+      const inputEl = document.getElementById('input-player-chat');
+      const userMsg = inputEl.value.trim();
+      if (!userMsg) {
+        showToast('✍️ 請輸入你想對他說的話，或點選上方快捷回覆喔！');
+        return;
+      }
+
+      sfx.send();
+      const npc = state.currentNpc;
+
+      let chosenReply = null;
+      const lowerMsg = userMsg.toLowerCase();
+
+      for (const rule of npc.keywordRules) {
+        if (rule.keys.some(k => lowerMsg.includes(k.toLowerCase()))) {
+          chosenReply = rule.replies[Math.floor(Math.random() * rule.replies.length)];
+          break;
+        }
+      }
+
+      if (!chosenReply) {
+        chosenReply = npc.defaultReplies[Math.floor(Math.random() * npc.defaultReplies.length)];
+      }
+
+      chosenReply = chosenReply.replace(/\{player\}/g, state.playerId);
+
+      const bonus = userMsg.length >= 8 ? 3 : 0;
+      const powerGain = +(0.7 + Math.random() * 0.8 + (bonus * 0.15)).toFixed(1);
+      const bondGain = 7 + bonus + Math.floor(Math.random() * 4);
+
+      state.power = +(state.power + powerGain).toFixed(1);
+      state.bond += bondGain;
+      state.metMembers[npc.id].count += 1;
+      state.metMembers[npc.id].affinity += bondGain;
+      state.metMembers[npc.id].lastChat = `你：「${userMsg}」 → ${npc.name}：${chosenReply}`;
+
+      document.getElementById('player-input-box').classList.add('hidden');
+      document.getElementById('player-said-text').textContent = userMsg;
+      document.getElementById('npc-reply-speaker').textContent = `${npc.avatar} ${npc.name} 回應：`;
+      document.getElementById('npc-dialog-affinity').textContent = state.metMembers[npc.id].affinity;
+      document.getElementById('interaction-reward-badge').textContent = `✨ 家族羈絆 +${bondGain} · 戰力 +${powerGain}M`;
+
+      document.getElementById('reply-result-box').classList.remove('hidden');
+      document.getElementById('after-reply-actions').classList.remove('hidden');
+
+      typewriterEffect('npc-reply-text', chosenReply);
+      updateHUD(powerGain, bondGain);
+
+      addChatLog(state.playerId, userMsg, 'text-cyan-300');
+      addChatLog(npc.name, chosenReply.replace(/^「|」$/g, ''), 'text-amber-300');
+    }
+
+    function finishInteraction() {
+      sfx.click();
+      state.isInteracting = false;
+
+      const npcSprite = document.getElementById('sprite-npc');
+      npcSprite.classList.add('hidden');
+      npcSprite.classList.remove('flex');
+      const fx = document.getElementById('stage-fx');
+      fx.classList.add('opacity-0', 'scale-75');
+
+      document.getElementById('dialogue-area').classList.add('hidden');
+      document.getElementById('action-explore-area').classList.remove('hidden');
+
+      if (state.stepIndex >= STORY_EVENTS.length) {
+        document.getElementById('btn-next-step').innerHTML = '<span>🏆 開啟我們的戰區家人物語結局</span>';
+      } else {
+        document.getElementById('btn-next-step').innerHTML = `<span>🧭 繼續推進回憶 (${state.stepIndex}/${STORY_EVENTS.length})</span>`;
+      }
+
+      if (state.stepIndex >= 8) {
+        document.getElementById('btn-early-ending').classList.remove('hidden');
+      }
+    }
+
+    function addChatLog(sender, text, colorClass = 'text-slate-300') {
+      state.chatLogs.push({ sender, text });
+      const logBox = document.getElementById('alliance-chat-log');
+      if (state.chatLogs.length === 1) logBox.innerHTML = '';
+
+      const item = document.createElement('div');
+      item.className = 'leading-snug border-b border-slate-800/60 pb-1';
+      item.innerHTML = `<span class="font-bold ${colorClass}">[${sender}]</span> <span class="text-slate-300">${text}</span>`;
+      logBox.appendChild(item);
+      logBox.scrollTop = logBox.scrollHeight;
+      document.getElementById('log-count').textContent = state.chatLogs.length;
+    }
+
+    // =========================================================================
+    // 8. 十六位戰區家人紀念冊彈窗
+    // =========================================================================
+    function toggleRosterModal(show) {
+      sfx.click();
+      const modal = document.getElementById('modal-roster');
+      if (!show) {
+        modal.classList.add('hidden');
+        return;
+      }
+
+      const grid = document.getElementById('roster-grid');
+      grid.innerHTML = ALLIANCE_MEMBERS.map(m => {
+        const met = state.metMembers[m.id];
+        return `
+          <div class="bg-slate-900/95 border ${met ? 'border-amber-500/40' : 'border-slate-800 opacity-75'} rounded-xl p-3.5 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="pixel-portrait w-11 h-11 rounded-xl bg-gradient-to-br ${m.color} p-1 border border-white/20 shrink-0">${m.portrait}</div>
+                  <div>
+                    <div class="font-black text-sm text-white flex items-center gap-1">
+                      <span>${m.name}</span>
+                      <span class="text-xs">${m.avatar}</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300">${m.tag}</div>
+                  </div>
+                </div>
+                <span class="text-xs font-mono-tech px-2 py-0.5 rounded shrink-0 ${met ? 'bg-rose-500/20 text-rose-300' : 'bg-slate-800 text-slate-500'}">
+                  ${met ? `❤️ ${met.affinity}` : '待重逢'}
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">${m.desc}</p>
+            </div>
+            ${met ? `
+              <div class="bg-slate-950/85 border border-slate-800 rounded-lg p-2 text-[11px] text-slate-300 mt-1">
+                <span class="text-emerald-400 font-bold block mb-0.5">專屬對話紀念：</span>
+                <p class="line-clamp-2">${met.lastChat}</p>
+              </div>
+            ` : `
+              <div class="text-[11px] text-slate-500 italic pt-1">繼續推進章節就能在戰區遇見他囉！</div>
+            `}
+          </div>
+        `;
+      }).join('');
+
+      modal.classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 9. 多結局結算與專屬聯盟戰報分享
+    // =========================================================================
+    function showEnding() {
+      sfx.levelup();
+      document.getElementById('screen-game').classList.add('hidden');
+      document.getElementById('screen-ending').classList.remove('hidden');
+
+      const metIds = Object.keys(state.metMembers);
+      const metCount = metIds.length;
+
+      let bestMember = ALLIANCE_MEMBERS[0];
+      let maxAff = -1;
+      for (const id of metIds) {
+        if (state.metMembers[id].affinity > maxAff) {
+          maxAff = state.metMembers[id].affinity;
+          bestMember = ALLIANCE_MEMBERS.find(m => m.id === id) || bestMember;
+        }
+      }
+
+      let ending = {
+        emoji: '👨‍👩‍👧‍👦',
+        title: '跨越國界的線下聚會大團圓',
+        subtitle: '從並肩作戰到一輩子的摯友 · 我們的青春永不散場',
+        story: `賽季落幕後，[${state.allianceTag}] 聯盟這群在《Last War》裡一起半夜開罩、搶挖金寶箱的戰友，終於實現了跨越台、港、新、泰、美的線下大團圓！菜菜帶來了店裡最美的白錦龜背芋，車車寄來兩大箱甜滋滋的水蜜桃，AT 默默包下了整間餐廳，機武與芙芙豪爽乾杯，京東與泡泡還在討論下季的雷達腳本，球球與 WJ 用多國語言歡呼——原來一款遊戲最珍貴的寶藏，從來不是滿星神裝，而是螢幕背後這群把彼此當成一輩子家人的摯友！`
+      };
+
+      if (state.power >= 31 && state.bond >= 145) {
+        ending = {
+          emoji: '👑',
+          title: '制霸全服的傳奇家人戰隊',
+          subtitle: '戰力與家族羈絆雙雙登頂，全戰區無人不曉的傳說',
+          story: `在指揮官【[${state.allianceTag}] ${state.playerId}】的並肩作戰下，機武衝鋒、AT 火力壓制、京東精準雷達、樂哥與賣賣24小時跨時區輪班守護，你們不僅拿下了跨服首都戰的最高榮耀，更在所有伺服器留下了「最團結、最溫暖家族」的傳說！無論未來版本怎麼更新，只要盟頻喊一聲，這 16 位家人永遠都會第一個飛過來挺你！`
+        };
+      } else if (bestMember.id === 'cheche' || bestMember.id === 'wj' || bestMember.id === 'qiuqiu') {
+        ending = {
+          emoji: '🤣',
+          title: '深夜不睡覺的國際歡樂幹話天團',
+          subtitle: '打架可以輸，但盟頻的車速與笑聲絕對不能停！',
+          story: `你們的 [${state.allianceTag}] 聯盟聊天室每天都有 999+ 條未讀訊息！有車車在高速公路飆車、WJ 的 Singlish 戰術宣言、球球的「55555」奇襲計畫，還有吱吱家兩隻鸚鵡的現場伴奏。在【${state.playerId}】的加入後，整個聯盟每天都像在開跨國線上派對，快樂到連敵對聯盟都忍不住想跳槽過來當家人！`
+        };
+      } else if (bestMember.id === 'kuku' || bestMember.id === 'jingdong' || bestMember.id === 'paopao') {
+        ending = {
+          emoji: '🏴‍☠️',
+          title: '全服聞風喪膽的尋寶拆遷大家庭',
+          subtitle: '沒有我們挖不到的金寶箱，也沒有搶不走的資源車',
+          story: `靠著京東的尋寶雷達、酷酷的每日神手氣、泡泡的精準時間表，再加上【${state.playerId}】的超強執行力，全服的金色秘密寶藏幾乎都被 [${state.allianceTag}] 聯盟包辦了！大家每天荷包滿滿、笑得合不攏嘴，成為戰區裡最富有的快樂大家庭！`
+        };
+      }
+
+      document.getElementById('ending-emoji').textContent = ending.emoji;
+      document.getElementById('ending-title').textContent = ending.title;
+      document.getElementById('ending-subtitle').textContent = ending.subtitle;
+      document.getElementById('ending-story').textContent = ending.story;
+
+      document.getElementById('end-stat-power').textContent = `${state.power.toFixed(1)}M`;
+      document.getElementById('end-stat-bond').textContent = state.bond;
+      document.getElementById('end-stat-met').textContent = `${metCount}/16`;
+
+      document.getElementById('best-buddy-portrait').innerHTML = bestMember.portrait;
+      document.getElementById('best-buddy-name').textContent = `${bestMember.name}（${bestMember.tag}）`;
+      document.getElementById('best-buddy-quote').textContent = `「${state.playerId}，下個賽季我們也要繼續在一起喔！從戰友到一輩子的家人，有你在真好！」`;
+    }
+
+    function copyShareSummary() {
+      sfx.click();
+      const title = document.getElementById('ending-title').textContent;
+      const buddy = document.getElementById('best-buddy-name').textContent;
+      const metCount = Object.keys(state.metMembers).length;
+      const pageUrl = window.location.href;
+
+      const text = [
+        `🛡️《Last War 戰區家人物語｜從並肩作戰到一輩子的摯友》`,
+        `🎖️ 指揮官：[${state.allianceTag}] ${state.playerId}`,
+        `⚔️ 聯盟總戰力：${state.power.toFixed(1)}M ｜ ❤️ 家族羈絆值：${state.bond}`,
+        `👨‍👩‍👧‍👦 重逢家人：${metCount}/16 位戰區夥伴`,
+        `🏆 達成回憶結局：【${title}】`,
+        `💖 本季最有默契靈魂家人：${buddy}`,
+        `✨ 「從半夜開罩、搶寶開車到現實中互相牽掛，這不是一場遊戲，這是屬於我們十六個人的青春與家人故事！」`,
+        pageUrl.startsWith('http') ? `👉 換你來測測看：${pageUrl}` : ''
+      ].filter(Boolean).join('\n');
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('📋 專屬聯盟戰報已複製！快貼到 Line / Discord 群組給大家看！');
+      } catch (err) {
+        showToast('⚠️ 複製失敗，請直接螢幕截圖分享給戰友喔！');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function resetGame() {
+      sfx.click();
+      document.getElementById('screen-ending').classList.add('hidden');
+      document.getElementById('screen-game').classList.add('hidden');
+      document.getElementById('btn-open-roster').classList.add('hidden');
+      document.getElementById('btn-early-ending').classList.add('hidden');
+      document.getElementById('screen-start').classList.remove('hidden');
+    }
+
+    window.onload = function () {
+      initStartScreen();
+    };
+  </script>
+</body>
+</html>
